@@ -1,0 +1,104 @@
+%{
+  #include <math.h>
+  #include <iostream>
+  #include <string>
+  using namespace std;
+  int yylex (void);
+  void yyerror (string);
+  void clear();
+  int divide(int a,int b);
+  string reverseNotation = "";
+  bool error = false;
+%}
+
+
+/* Bison declarations. */
+%token NUM
+%token LEFT_BRACKET
+%token RIGHT_BRACKET
+%token END
+%token ERROR
+
+
+%left SUBSTRACT ADD
+%left MULTIPLY DIVIDE MOD //left (x+y)+z idzie od lewej
+%right POWER      //right x^y^z=x^(y^z)
+%left MINUS
+
+%type <number> NUM stmt
+%union{
+    int number;
+}
+%% /* The grammar follows. */
+
+input:
+  %empty
+| input line
+;
+
+
+line:
+  END
+| stmt END {
+  if (!error) {
+    cout << reverseNotation << endl << "Wynik: " << $1 << endl;
+  }
+  clear();
+}
+| error END {
+   cerr << "Error: " << "błąd składni" << endl;
+  clear();
+}
+;
+
+
+stmt:
+  NUM                     { reverseNotation += to_string($1) + " "; $$ = $1;}
+| stmt ADD stmt           { reverseNotation += "+ "; $$ = $1 + $3;}
+| stmt SUBSTRACT stmt     { reverseNotation += "- "; $$ = $1 - $3;}
+| stmt MULTIPLY stmt      { reverseNotation += "* "; $$ = $1 * $3;}
+| stmt DIVIDE stmt        {
+                          reverseNotation += "/ ";
+                          if ($3 != 0)
+                            $$ = divide($1,$3);
+                          else
+                            yyerror ("dzielenie przez 0");
+                        }
+| stmt MOD stmt           {
+                          reverseNotation += "% ";
+                          if ($3 != 0)
+                            $$ = $1-divide($1,$3)*$3;
+                          else
+                            yyerror ("dzielenie przez 0");
+                        }
+| stmt POWER stmt           { 
+                              if($3 < 0) {
+                                yyerror ("ujemna potęga");
+                              }else{
+                                reverseNotation += "^ "; $$ = pow ($1, $3);  
+                              } 
+                            }
+| LEFT_BRACKET stmt RIGHT_BRACKET             { $$ = $2;}
+| SUBSTRACT stmt %prec MINUS    { $$ = -$2; reverseNotation += "~ "; }  /* Unary minus   */
+
+;
+
+%%
+
+int divide(int a,int b){
+  return floor((float)a / (float)b);
+}
+void yyerror (string s)
+{
+  error = true;
+  cerr << "Error: " << s << endl;
+}
+void clear(){
+    error = false;
+  reverseNotation = "";
+}
+
+int main (void)
+{
+  return yyparse ();
+}
