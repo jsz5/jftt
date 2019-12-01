@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/jftt1.dir/Knuth-Morris-Pratt/main.cpp.o CMakeFiles/jftt1.dir/Automaty_skończone/main.cpp.o  -o jftt1 
