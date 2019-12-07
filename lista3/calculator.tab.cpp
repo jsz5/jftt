@@ -70,12 +70,13 @@
   using namespace std;
   int yylex (void);
   void yyerror (string);
+  string errorMessage="";
   void clear();
   int divide(int a,int b);
   string reverseNotation = "";
-  bool error = false;
+  bool errors = false;
 
-#line 79 "calculator.tab.cpp" /* yacc.c:339  */
+#line 80 "calculator.tab.cpp" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -130,11 +131,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 29 "calculator.ypp" /* yacc.c:355  */
+#line 30 "calculator.ypp" /* yacc.c:355  */
 
     int number;
 
-#line 138 "calculator.tab.cpp" /* yacc.c:355  */
+#line 139 "calculator.tab.cpp" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -151,7 +152,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 155 "calculator.tab.cpp" /* yacc.c:358  */
+#line 156 "calculator.tab.cpp" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -449,8 +450,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    35,    35,    36,    41,    42,    48,    56,    57,    58,
-      59,    60,    67,    74,    81,    82
+       0,    36,    36,    37,    42,    43,    52,    60,    61,    62,
+      63,    64,    71,    78,    85,    86
 };
 #endif
 
@@ -1234,51 +1235,54 @@ yyreduce:
   switch (yyn)
     {
         case 5:
-#line 42 "calculator.ypp" /* yacc.c:1646  */
+#line 43 "calculator.ypp" /* yacc.c:1646  */
     {
-  if (!error) {
-    cout << reverseNotation << endl << "Wynik: " << (yyvsp[-1].number) << endl;
+   cout << reverseNotation << endl;
+  if (!errors) {
+    cout << "Wynik: " << (yyvsp[-1].number) << endl;
+  }else{
+      cerr << "Error: " << errorMessage << endl;
   }
   clear();
 }
-#line 1245 "calculator.tab.cpp" /* yacc.c:1646  */
+#line 1249 "calculator.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 48 "calculator.ypp" /* yacc.c:1646  */
+#line 52 "calculator.ypp" /* yacc.c:1646  */
     {
    cerr << "Error: " << "błąd składni" << endl;
   clear();
 }
-#line 1254 "calculator.tab.cpp" /* yacc.c:1646  */
+#line 1258 "calculator.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 56 "calculator.ypp" /* yacc.c:1646  */
+#line 60 "calculator.ypp" /* yacc.c:1646  */
     { reverseNotation += to_string((yyvsp[0].number)) + " "; (yyval.number) = (yyvsp[0].number);}
-#line 1260 "calculator.tab.cpp" /* yacc.c:1646  */
+#line 1264 "calculator.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 57 "calculator.ypp" /* yacc.c:1646  */
+#line 61 "calculator.ypp" /* yacc.c:1646  */
     { reverseNotation += "+ "; (yyval.number) = (yyvsp[-2].number) + (yyvsp[0].number);}
-#line 1266 "calculator.tab.cpp" /* yacc.c:1646  */
+#line 1270 "calculator.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 58 "calculator.ypp" /* yacc.c:1646  */
+#line 62 "calculator.ypp" /* yacc.c:1646  */
     { reverseNotation += "- "; (yyval.number) = (yyvsp[-2].number) - (yyvsp[0].number);}
-#line 1272 "calculator.tab.cpp" /* yacc.c:1646  */
+#line 1276 "calculator.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 59 "calculator.ypp" /* yacc.c:1646  */
+#line 63 "calculator.ypp" /* yacc.c:1646  */
     { reverseNotation += "* "; (yyval.number) = (yyvsp[-2].number) * (yyvsp[0].number);}
-#line 1278 "calculator.tab.cpp" /* yacc.c:1646  */
+#line 1282 "calculator.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 60 "calculator.ypp" /* yacc.c:1646  */
+#line 64 "calculator.ypp" /* yacc.c:1646  */
     {
                           reverseNotation += "/ ";
                           if ((yyvsp[0].number) != 0)
@@ -1286,11 +1290,11 @@ yyreduce:
                           else
                             yyerror ("dzielenie przez 0");
                         }
-#line 1290 "calculator.tab.cpp" /* yacc.c:1646  */
+#line 1294 "calculator.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 67 "calculator.ypp" /* yacc.c:1646  */
+#line 71 "calculator.ypp" /* yacc.c:1646  */
     {
                           reverseNotation += "% ";
                           if ((yyvsp[0].number) != 0)
@@ -1298,11 +1302,11 @@ yyreduce:
                           else
                             yyerror ("dzielenie przez 0");
                         }
-#line 1302 "calculator.tab.cpp" /* yacc.c:1646  */
+#line 1306 "calculator.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 74 "calculator.ypp" /* yacc.c:1646  */
+#line 78 "calculator.ypp" /* yacc.c:1646  */
     { 
                               if((yyvsp[0].number) < 0) {
                                 yyerror ("ujemna potęga");
@@ -1310,23 +1314,23 @@ yyreduce:
                                 reverseNotation += "^ "; (yyval.number) = pow ((yyvsp[-2].number), (yyvsp[0].number));  
                               } 
                             }
-#line 1314 "calculator.tab.cpp" /* yacc.c:1646  */
+#line 1318 "calculator.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 81 "calculator.ypp" /* yacc.c:1646  */
+#line 85 "calculator.ypp" /* yacc.c:1646  */
     { (yyval.number) = (yyvsp[-1].number);}
-#line 1320 "calculator.tab.cpp" /* yacc.c:1646  */
+#line 1324 "calculator.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 82 "calculator.ypp" /* yacc.c:1646  */
+#line 86 "calculator.ypp" /* yacc.c:1646  */
     { (yyval.number) = -(yyvsp[0].number); reverseNotation += "~ "; }
-#line 1326 "calculator.tab.cpp" /* yacc.c:1646  */
+#line 1330 "calculator.tab.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 1330 "calculator.tab.cpp" /* yacc.c:1646  */
+#line 1334 "calculator.tab.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1554,7 +1558,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 86 "calculator.ypp" /* yacc.c:1906  */
+#line 90 "calculator.ypp" /* yacc.c:1906  */
 
 
 int divide(int a,int b){
@@ -1562,12 +1566,13 @@ int divide(int a,int b){
 }
 void yyerror (string s)
 {
-  error = true;
-  cerr << "Error: " << s << endl;
-}
+  errors = true;
+  errorMessage=s;
+ }
 void clear(){
-    error = false;
+    errors = false;
   reverseNotation = "";
+  errorMessage="";
 }
 
 int main (void)

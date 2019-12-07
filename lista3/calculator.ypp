@@ -5,10 +5,11 @@
   using namespace std;
   int yylex (void);
   void yyerror (string);
+  string errorMessage="";
   void clear();
   int divide(int a,int b);
   string reverseNotation = "";
-  bool error = false;
+  bool errors = false;
 %}
 
 
@@ -40,8 +41,11 @@ input:
 line:
   END
 | stmt END {
-  if (!error) {
-    cout << reverseNotation << endl << "Wynik: " << $1 << endl;
+   cout << reverseNotation << endl;
+  if (!errors) {
+    cout << "Wynik: " << $1 << endl;
+  }else{
+      cerr << "Error: " << errorMessage << endl;
   }
   clear();
 }
@@ -90,12 +94,13 @@ int divide(int a,int b){
 }
 void yyerror (string s)
 {
-  error = true;
-  cerr << "Error: " << s << endl;
-}
+  errors = true;
+  errorMessage=s;
+ }
 void clear(){
-    error = false;
+    errors = false;
   reverseNotation = "";
+  errorMessage="";
 }
 
 int main (void)

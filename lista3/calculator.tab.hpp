@@ -65,7 +65,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 29 "calculator.ypp" /* yacc.c:1909  */
+#line 30 "calculator.ypp" /* yacc.c:1909  */
 
     int number;
 
